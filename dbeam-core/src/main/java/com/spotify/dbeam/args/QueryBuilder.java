@@ -63,8 +63,8 @@ public class QueryBuilder implements Serializable {
 
     @Override
     public String getBaseSql() {
-      return String.format("%s FROM %s %s",
-              selectClause, tableName, DEFAULT_WHERE_CLAUSE);
+      return String.format("%s FROM %s",
+              selectClause, tableName);
     }
 
     @Override
@@ -195,7 +195,7 @@ public class QueryBuilder implements Serializable {
   }
 
   public QueryBuilder withLimit(long limit) {
-    limitStr = Optional.of(String.format(" LIMIT %d", limit));
+    limitStr = Optional.of(String.format(" where rownum = %d", limit));
     return this;
   }
 

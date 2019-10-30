@@ -97,9 +97,9 @@ public class JdbcAvroSchema {
     ResultSetMetaData meta = resultSet.getMetaData();
     String tableName = "no_table_name";
 
-    if (meta.getColumnCount() > 0) {
-      tableName = normalizeForAvro(meta.getTableName(1));
-    }
+//    if (meta.getColumnCount() > 0) {
+//      tableName = normalizeForAvro(meta.getTableName(1));
+//    }
     SchemaBuilder.FieldAssembler<Schema> builder = SchemaBuilder.record(tableName)
         .namespace(avroSchemaNamespace)
         .doc(avroDoc)
