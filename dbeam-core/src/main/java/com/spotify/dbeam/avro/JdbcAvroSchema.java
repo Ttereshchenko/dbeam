@@ -20,31 +20,6 @@
 
 package com.spotify.dbeam.avro;
 
-import static java.sql.Types.ARRAY;
-import static java.sql.Types.BIGINT;
-import static java.sql.Types.BINARY;
-import static java.sql.Types.BIT;
-import static java.sql.Types.BLOB;
-import static java.sql.Types.BOOLEAN;
-import static java.sql.Types.CHAR;
-import static java.sql.Types.CLOB;
-import static java.sql.Types.DATE;
-import static java.sql.Types.DOUBLE;
-import static java.sql.Types.FLOAT;
-import static java.sql.Types.INTEGER;
-import static java.sql.Types.LONGNVARCHAR;
-import static java.sql.Types.LONGVARBINARY;
-import static java.sql.Types.LONGVARCHAR;
-import static java.sql.Types.NCHAR;
-import static java.sql.Types.REAL;
-import static java.sql.Types.SMALLINT;
-import static java.sql.Types.TIME;
-import static java.sql.Types.TIMESTAMP;
-import static java.sql.Types.TIME_WITH_TIMEZONE;
-import static java.sql.Types.TINYINT;
-import static java.sql.Types.VARBINARY;
-import static java.sql.Types.VARCHAR;
-
 import com.spotify.dbeam.args.QueryBuilder;
 
 import java.sql.Connection;
@@ -58,6 +33,8 @@ import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.sql.Types.*;
 
 public class JdbcAvroSchema {
 
@@ -187,6 +164,7 @@ public class JdbcAvroSchema {
         return field.bytesType().endUnion().nullDefault();
       case DOUBLE:
         return field.doubleType().endUnion().nullDefault();
+      case NUMERIC:
       case FLOAT:
       case REAL:
         return field.floatType().endUnion().nullDefault();
