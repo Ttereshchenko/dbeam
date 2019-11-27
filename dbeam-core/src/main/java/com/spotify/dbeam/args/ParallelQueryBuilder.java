@@ -62,6 +62,7 @@ public class ParallelQueryBuilder implements Serializable {
         case Types.LONGVARBINARY:
         case Types.BIGINT:
         case Types.INTEGER:
+        case Types.NUMERIC:
           min = resultSet.getLong(minColumnName);
           // TODO
           // check resultSet.wasNull(); NULL -> 0L
@@ -118,14 +119,14 @@ public class ParallelQueryBuilder implements Serializable {
     List<QueryRange> ranges = generateRanges(min, max, parallelism);
 
     return ranges.stream()
-        .map(
-            x ->
-                queryBuilder
-                    .copy() // we create a new query here
-                    .withParallelizationCondition(
-                        splitColumn, x.getStartPointIncl(), x.getEndPoint(), x.isEndPointExcl())
-                    .build())
-        .collect(Collectors.toList());
+            .map(
+                    x ->
+                            String.format("%s from (select T.*, ROWNUM row_n from (%s) T where ROWNUM %s %s) where row_n >= %s"
+                                    , ((QueryBuilder.TableQueryBase) queryBuilder.getBase()).getSelectClause()
+                                    , queryBuilder.toString()
+                                    , x.isEndPointExcl ? "<" : "<="
+                                    , x.getEndPoint(), x.getStartPointIncl()))
+            .collect(Collectors.toList());
   }
 
   /**

@@ -28,6 +28,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
@@ -54,6 +56,7 @@ public class JdbcAvroSchema {
           String avroDoc, boolean useLogicalTypes)
       throws SQLException {
     LOGGER.debug("Creating Avro schema based on the first read row from the database");
+    setSCWithColumnNames(connection, baseSqlQuery);
     try (Statement statement = connection.createStatement()) {
       final ResultSet
           resultSet =
@@ -109,6 +112,27 @@ public class JdbcAvroSchema {
       fieldAvroType(columnType, meta.getPrecision(i), field, useLogicalTypes);
     }
     return builder;
+  }
+
+  private static void setSCWithColumnNames(Connection connection, QueryBuilder baseSqlQuery) throws SQLException
+  {
+    try(Statement statement = connection.createStatement()) {
+      final List<String> names = new ArrayList<>();
+      final ResultSet resultSet = statement.executeQuery(baseSqlQuery.copy().withLimitOne().build());
+      final ResultSetMetaData meta = resultSet.getMetaData();
+      for (int i = 1; i <= meta.getColumnCount(); i++) {
+
+        String columnName;
+        if (meta.getColumnName(i).isEmpty()) {
+          columnName = meta.getColumnLabel(i);
+        } else {
+          columnName = meta.getColumnName(i);
+        }
+        names.add(columnName);
+      }
+
+      ((QueryBuilder.TableQueryBase)baseSqlQuery.getBase()).setSelectClause("SELECT " + String.join(",", names));
+    }
   }
 
   private static SchemaBuilder.FieldAssembler<Schema> fieldAvroType(

@@ -47,10 +47,20 @@ public class QueryBuilder implements Serializable {
    * 
    * <p>Immutable entity. 
    */
-  private static class TableQueryBase implements QueryBase {
+  public static class TableQueryBase implements QueryBase {
 
     private final String tableName;
-    private final String selectClause;
+    private String selectClause;
+
+    public void setSelectClause(final String selectClause)
+    {
+      this.selectClause = selectClause;
+    }
+
+    public String getSelectClause()
+    {
+      return this.selectClause;
+    }
 
     public TableQueryBase(final String tableName) {
       this(tableName, DEFAULT_SELECT_CLAUSE);
@@ -117,6 +127,11 @@ public class QueryBuilder implements Serializable {
   private final QueryBase base;
   private final List<String> whereConditions = new LinkedList<>();
   private Optional<String> limitStr = Optional.empty();
+
+  public QueryBase getBase()
+  {
+    return this.base;
+  }
   
   private QueryBuilder(final QueryBase base) {
     this.base = base;
