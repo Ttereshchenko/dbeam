@@ -100,7 +100,6 @@ public class JdbcAvroRecord {
         return resultSet -> nullableBytes(resultSet.getBytes(column));
       case DOUBLE:
         return resultSet -> resultSet.getDouble(column);
-      case NUMERIC:
       case FLOAT:
       case REAL:
         return resultSet -> resultSet.getFloat(column);

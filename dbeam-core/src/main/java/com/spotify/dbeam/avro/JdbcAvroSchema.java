@@ -164,7 +164,6 @@ public class JdbcAvroSchema {
         return field.bytesType().endUnion().nullDefault();
       case DOUBLE:
         return field.doubleType().endUnion().nullDefault();
-      case NUMERIC:
       case FLOAT:
       case REAL:
         return field.floatType().endUnion().nullDefault();
