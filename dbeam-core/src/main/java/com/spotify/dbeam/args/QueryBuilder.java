@@ -35,11 +35,14 @@ public class QueryBuilder implements Serializable {
   private static final String DEFAULT_WHERE_CLAUSE = "WHERE 1=1";
 
 
-  interface QueryBase {
+  public interface QueryBase {
 
     String getBaseSql();
 
     QueryBase copyWithSelect(final String selectClause);
+
+    void setSelectClause(final String selectClause);
+    String getSelectClause();
   }
 
   /**
@@ -52,6 +55,7 @@ public class QueryBuilder implements Serializable {
     private final String tableName;
     private String selectClause;
 
+    @Override
     public void setSelectClause(final String selectClause)
     {
       this.selectClause = selectClause;
@@ -96,7 +100,7 @@ public class QueryBuilder implements Serializable {
   private static class UserQueryBase implements QueryBase {
 
     private final String userSqlQuery;
-    private final String selectClause;
+    private String selectClause;
 
     public UserQueryBase(final String userSqlQuery) {
       this(userSqlQuery, DEFAULT_SELECT_CLAUSE);
@@ -106,11 +110,22 @@ public class QueryBuilder implements Serializable {
       this.userSqlQuery = removeTrailingSymbols(userSqlQuery);
       this.selectClause = selectClause;
     }
+
+    @Override
+    public void setSelectClause(final String selectClause)
+    {
+      this.selectClause = selectClause;
+    }
+
+    public String getSelectClause()
+    {
+      return this.selectClause;
+    }
     
     @Override
     public String getBaseSql() {
-      return String.format("%s FROM (%s) %s",
-              selectClause, userSqlQuery, DEFAULT_WHERE_CLAUSE);
+      return String.format("%s FROM (%s) ",
+              selectClause, userSqlQuery);
     }
 
     @Override

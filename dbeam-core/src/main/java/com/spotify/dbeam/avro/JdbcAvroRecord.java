@@ -72,18 +72,18 @@ public class JdbcAvroRecord {
       case SMALLINT:
       case TINYINT:
         return resultSet -> resultSet.getInt(column);
-      case TIMESTAMP:
-      case DATE:
-      case TIME:
-      case TIME_WITH_TIMEZONE:
-        return resultSet -> {
-          final Timestamp timestamp = resultSet.getTimestamp(column, CALENDAR);
-          if (timestamp != null) {
-            return timestamp.getTime();
-          } else {
-            return null;
-          }
-        };
+//      case TIMESTAMP:
+//      case DATE:
+//      case TIME:
+//      case TIME_WITH_TIMEZONE:
+//        return resultSet -> {
+//          final Timestamp timestamp = resultSet.getTimestamp(column, CALENDAR);
+//          if (timestamp != null) {
+//            return timestamp.getTime();
+//          } else {
+//            return null;
+//          }
+//        };
       case BOOLEAN:
         return resultSet -> resultSet.getBoolean(column);
       case BIT:

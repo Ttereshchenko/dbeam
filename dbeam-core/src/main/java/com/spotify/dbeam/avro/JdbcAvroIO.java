@@ -32,6 +32,7 @@ import java.nio.channels.WritableByteChannel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.TimeZone;
 
 import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
@@ -54,6 +55,7 @@ import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.SerializableFunctions;
 import org.apache.beam.sdk.util.MimeTypes;
 import org.apache.beam.sdk.values.PCollection;
+import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,6 +159,12 @@ public class JdbcAvroIO {
     protected void prepareWrite(WritableByteChannel channel) throws Exception {
       logger.info("jdbcavroio : Preparing write...");
       connection = jdbcAvroArgs.jdbcConnectionConfiguration().createConnection();
+//      try {
+//        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//        connection = jdbcAvroArgs.jdbcConnectionConfiguration().createConnection();
+//      } catch (Exception e) {
+//        throw new RuntimeException(DateTimeZone.getDefault() + "\n" + e.getMessage());
+//      }
       Void destination = getDestination();
       Schema schema = dynamicDestinations.getSchema(destination);
       dataFileWriter = new DataFileWriter<>(new GenericDatumWriter<GenericRecord>(schema))

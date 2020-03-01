@@ -122,7 +122,7 @@ public class ParallelQueryBuilder implements Serializable {
             .map(
                     x ->
                             String.format("%s from (select T.*, ROWNUM row_n from (%s) T where ROWNUM %s %s) where row_n >= %s"
-                                    , ((QueryBuilder.TableQueryBase) queryBuilder.getBase()).getSelectClause()
+                                    , queryBuilder.getBase().getSelectClause()
                                     , queryBuilder.toString()
                                     , x.isEndPointExcl ? "<" : "<="
                                     , x.getEndPoint(), x.getStartPointIncl()))

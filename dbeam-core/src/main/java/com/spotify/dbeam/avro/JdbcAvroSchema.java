@@ -131,7 +131,7 @@ public class JdbcAvroSchema {
         names.add(columnName);
       }
 
-      ((QueryBuilder.TableQueryBase)baseSqlQuery.getBase()).setSelectClause("SELECT " + String.join(",", names));
+      baseSqlQuery.getBase().setSelectClause("SELECT " + String.join(",", names));
     }
   }
 
@@ -162,16 +162,16 @@ public class JdbcAvroSchema {
       case SMALLINT:
       case TINYINT:
         return field.intType().endUnion().nullDefault();
-      case TIMESTAMP:
-      case DATE:
-      case TIME:
-      case TIME_WITH_TIMEZONE:
-        if (useLogicalTypes) {
-          return field.longBuilder().prop("logicalType", "timestamp-millis")
-              .endLong().endUnion().nullDefault();
-        } else {
-          return field.longType().endUnion().nullDefault();
-        }
+//      case TIMESTAMP:
+//      case DATE:
+//      case TIME:
+//      case TIME_WITH_TIMEZONE:
+//        if (useLogicalTypes) {
+//          return field.longBuilder().prop("logicalType", "timestamp-millis")
+//              .endLong().endUnion().nullDefault();
+//        } else {
+//          return field.longType().endUnion().nullDefault();
+//        }
       case BOOLEAN:
         return field.booleanType().endUnion().nullDefault();
       case BIT:
